@@ -22,3 +22,5 @@ nbactions.xml
 */.classpath
 */.settings/*
 */.tscache/*
+.idea
+*/*.iml
