@@ -28,3 +28,4 @@ nbactions.xml
 gradlew
 gradlew.bat
 /.gradle/
+gradle/
