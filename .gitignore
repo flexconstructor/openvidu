@@ -32,3 +32,4 @@ gradle/
 */node_modules/*
 */npm-debug.log
 */static/
+*/dist
