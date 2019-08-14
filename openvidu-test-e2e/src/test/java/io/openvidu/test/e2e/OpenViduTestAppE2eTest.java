@@ -53,6 +53,7 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.junit.Assert;
+import org.junit.Ignore;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.DisplayName;
@@ -113,6 +114,7 @@ import io.openvidu.test.e2e.utils.Unzipper;
  * @since 1.1.1
  */
 @Tag("e2e")
+@Ignore
 @DisplayName("E2E tests for OpenVidu TestApp")
 @RunWith(JUnitPlatform.class)
 public class OpenViduTestAppE2eTest {

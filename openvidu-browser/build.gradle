@@ -1,0 +1,26 @@
+plugins {
+    id "com.github.node-gradle.node" version "2.0.0"
+}
+
+node {
+
+    // Version of node to use.
+    version = '10.16.2'
+
+    // Version of npm to use.
+    npmVersion = '6.9.0'
+
+    distBaseUrl = 'https://nodejs.org/download/release/'
+}
+
+task buildBrowser(type: NpmTask, dependsOn: npm_run_build){
+    args = ['run', 'browserify']
+}
+
+assemble.dependsOn buildBrowser
+
+
+clean.doFirst{
+    delete file('node_modules').listFiles()
+    delete file('static/js').listFiles()
+}
