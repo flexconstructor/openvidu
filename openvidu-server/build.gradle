@@ -3,6 +3,7 @@
  */
 
 dependencies {
+    compile 'io.github.lognet:grpc-spring-boot-starter:3.5.1'
     compile 'org.kurento:kurento-jsonrpc-server:6.11.0'
     compile project(':openvidu-client')
     compile 'org.kurento:kurento-client:6.11.0'
