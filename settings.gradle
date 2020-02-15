@@ -11,7 +11,5 @@ include(':openvidu-test-browsers')
 include(':openvidu-java-client')
 include(':openvidu-browser')
 include(':openvidu-testapp')
-include 'eureka-client'
-include 'eureka-server'
 include 'openvidu-grpc-api'
 
