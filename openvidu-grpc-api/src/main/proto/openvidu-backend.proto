@@ -1,22 +1,74 @@
 syntax = "proto3";
 
 option java_multiple_files = true;
-option java_package = "net.devh.boot.grpc.examples.lib";
-option java_outer_classname = "HelloWorldProto";
+option java_package = "media.karamba.backend.api.grpc";
+option java_outer_classname = "BackendGateway";
 
-// The greeting service definition.
-service Simple {
-    // Sends a greeting
-    rpc SayHello (HelloRequest) returns (HelloReply) {
+// Media control service. It granted operation with rooms for our partners.
+service MediaControlService {
+
+    // Checks partners credentials for creating media room.
+    rpc CreateRoom (CreateRoomRequest) returns (CreateRoomResponse);
+}
+
+// It contains one of : created room data or error DTO.
+message CreateRoomResponse {
+    oneof result {
+        RoomDTO roomData = 1;
+        ErrorDTO error = 2;
     }
 }
 
-// The request message containing the user's name.
-message HelloRequest {
-    string name = 1;
+// Request object for creation of media room.
+message CreateRoomRequest {
+
+    // Karamba partner ID.
+    string partnerID = 1;
+
+    // Request creation date (UNIX timestamp)
+    int64 requestTimestamp = 2;
+
+    // Request key (it line returns to client with response anyway).
+    string requestKey = 3;
+
+    // base64 of ordered partnersID + partners secret + requestTimestamp + requestKey.
+    string accessToken = 4;
+
 }
 
-// The response message containing the greetings
-message HelloReply {
-    string message = 1;
+// Media room data object.
+message RoomDTO {
+
+    // Room ID
+    string roomID = 1;
+
+    // Owner`s participant ID.
+    string ownerID = 2;
+
+    // Partners request key.
+    string requestKey = 3;
+
+}
+
+// Error data object that contains enumeration of error IDs and human readable description.
+message ErrorDTO {
+
+    // value of error ID
+    ErrorID errorID = 1;
+
+    // Human readable description.
+    string description = 2;
+
+    // Partners request key.
+    string requestKye = 3;
+}
+
+// enumeration of error IDs.
+enum ErrorID {
+
+    // Internal server error.
+    INTERNAL_ERROR = 0;
+
+    // The partner has no eno funds.
+    NO_ENO_FUNDS = 1;
 }

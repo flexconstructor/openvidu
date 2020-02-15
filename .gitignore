@@ -33,3 +33,4 @@ gradle/
 */npm-debug.log
 */static/
 */dist
+*/protoGen/*

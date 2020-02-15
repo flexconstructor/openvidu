@@ -11,5 +11,5 @@ include(':openvidu-test-browsers')
 include(':openvidu-java-client')
 include(':openvidu-browser')
 include(':openvidu-testapp')
-include 'openvidu-grpc-api'
+include ('openvidu-grpc-api')
 
