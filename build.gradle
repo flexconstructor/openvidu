@@ -7,6 +7,7 @@ buildscript {
         SPRING_BOOT_VERSION = '1.5.13.RELEASE'
         GRPC_VERSION = '1.25.0'
         GRPC_SPRING_BOOT_STARTER_VERSION = '3.5.1'
+        PROTOBUF_PLUGIN_VERSION = '0.8.5'
     }
     repositories {
         mavenCentral()
@@ -16,12 +17,7 @@ buildscript {
 
     }
     dependencies {
-       // classpath "com.jfrog.bintray.gradle:gradle-bintray-plugin:1.5"
-        classpath 'com.google.protobuf:protobuf-gradle-plugin:0.8.5'
-        //classpath "org.jfrog.buildinfo:build-info-extractor-gradle:4.0.0"
-        //classpath 'com.palantir:jacoco-coverage:0.4.0'
-       // classpath "io.codearte.gradle.nexus:gradle-nexus-staging-plugin:0.21.1"
-        //classpath "de.marcphilipp.gradle:nexus-publish-plugin:0.4.0"
+        classpath "com.google.protobuf:protobuf-gradle-plugin:${PROTOBUF_PLUGIN_VERSION}"
     }
 }
 
