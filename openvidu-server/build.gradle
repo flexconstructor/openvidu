@@ -16,6 +16,9 @@ dependencies {
     compile 'com.github.docker-java:docker-java:3.1.2'
     compile 'org.codehaus.janino:janino:3.0.12'
     compile 'org.apache.commons:commons-lang3:3.9'
+    compile 'org.springframework.cloud:spring-cloud-starter-eureka:1.0.0.RELEASE'
+    compile 'org.springframework.boot:spring-boot-starter-actuator:2.2.4.RELEASE'
+    compile project(':openvidu-grpc-api')
     compile project(':openvidu-java-client')
     testCompile project(':openvidu-test')
     testCompile 'org.hamcrest:hamcrest-core:2.1'

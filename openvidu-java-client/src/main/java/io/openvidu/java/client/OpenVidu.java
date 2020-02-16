@@ -59,6 +59,7 @@ import org.json.simple.parser.ParseException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+@Deprecated
 public class OpenVidu {
 
 	private static final Logger log = LoggerFactory.getLogger(OpenVidu.class);
@@ -79,6 +80,7 @@ public class OpenVidu {
 	 *                          Server is up an running
 	 * @param secret            Secret used on OpenVidu Server initialization
 	 */
+
 	public OpenVidu(String hostname, String secret) {
 
 		this.hostname = hostname;

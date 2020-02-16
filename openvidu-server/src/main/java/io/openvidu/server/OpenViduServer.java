@@ -34,6 +34,7 @@ import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnMissingBean;
 import org.springframework.boot.context.event.ApplicationReadyEvent;
+import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Import;
 import org.springframework.context.event.EventListener;
@@ -74,6 +75,7 @@ import io.openvidu.server.webhook.CDRLoggerWebhook;
  * @author Pablo Fuente (pablofuenteperez@gmail.com)
  */
 @Import({ JsonRpcConfiguration.class })
+@EnableEurekaClient
 @SpringBootApplication
 public class OpenViduServer implements JsonRpcConfigurer {
 
