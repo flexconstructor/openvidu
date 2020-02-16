@@ -12,4 +12,5 @@ include(':openvidu-java-client')
 include(':openvidu-browser')
 include(':openvidu-testapp')
 include ('openvidu-grpc-api')
+include 'karamba-backend-public-api'
 
