@@ -1,5 +1,6 @@
 package media.karamba.backend.api.client.impl;
 
+import io.grpc.ManagedChannel;
 import media.karamba.backend.api.client.KarambaBackendProvider;
 import media.karamba.backend.api.config.KarambaBackendConfiguration;
 import media.karamba.backend.api.grpc.CreateRoomRequest;
@@ -9,13 +10,12 @@ import media.karamba.backend.api.utils.SignGenerator;
 
 import java.util.Date;
 
-public class KarambaBackendProviderImpl  implements KarambaBackendProvider {
+public class KarambaBackendProviderImpl implements KarambaBackendProvider {
     private final MediaControlServiceGrpc.MediaControlServiceBlockingStub stub;
     private final KarambaBackendConfiguration configuration;
 
-    public KarambaBackendProviderImpl(MediaControlServiceGrpc.MediaControlServiceBlockingStub stub,
-                                      KarambaBackendConfiguration configuration) {
-        this.stub = stub;
+    public KarambaBackendProviderImpl(ManagedChannel channel, KarambaBackendConfiguration configuration) {
+        this.stub = MediaControlServiceGrpc.newBlockingStub(channel);
         this.configuration = configuration;
     }
 
