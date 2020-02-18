@@ -1,6 +1,8 @@
 package media.karamba.backend.api.client.impl;
 
-import media.karamba.backend.api.client.KarambaBackendProvider;
+import com.google.common.util.concurrent.ListenableFuture;
+import io.grpc.ManagedChannel;
+import media.karamba.backend.api.client.KarambaBackendProviderAsync;
 import media.karamba.backend.api.config.KarambaBackendConfiguration;
 import media.karamba.backend.api.grpc.CreateRoomRequest;
 import media.karamba.backend.api.grpc.CreateRoomResponse;
@@ -9,18 +11,17 @@ import media.karamba.backend.api.utils.SignGenerator;
 
 import java.util.Date;
 
-public class KarambaBackendProviderImpl  implements KarambaBackendProvider {
-    private final MediaControlServiceGrpc.MediaControlServiceBlockingStub stub;
+public class KarambaBackendProviderAsyncImpl implements KarambaBackendProviderAsync {
+    private final MediaControlServiceGrpc.MediaControlServiceFutureStub stub;
     private final KarambaBackendConfiguration configuration;
 
-    public KarambaBackendProviderImpl(MediaControlServiceGrpc.MediaControlServiceBlockingStub stub,
-                                      KarambaBackendConfiguration configuration) {
-        this.stub = stub;
+    public KarambaBackendProviderAsyncImpl(ManagedChannel channel, KarambaBackendConfiguration configuration) {
+        stub = MediaControlServiceGrpc.newFutureStub(channel);
         this.configuration = configuration;
     }
 
     @Override
-    public CreateRoomResponse createRoom(String roomName, String requestId) throws Exception {
+    public ListenableFuture<CreateRoomResponse> createRoom(String roomName, String requestId) throws Exception {
         long timestamp = new Date().getTime();
         String accessToken = SignGenerator.generate();
         return this.stub.createRoom(CreateRoomRequest.newBuilder()
