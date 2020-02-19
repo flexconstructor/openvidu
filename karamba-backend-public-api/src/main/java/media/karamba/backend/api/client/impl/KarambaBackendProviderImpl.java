@@ -20,14 +20,12 @@ public class KarambaBackendProviderImpl implements KarambaBackendProvider {
     }
 
     @Override
-    public CreateRoomResponse createRoom(String roomName, String requestId) throws Exception {
+    public CreateRoomResponse createRoom(String roomName, String roomDescription,  String requestId) throws Exception {
         long timestamp = new Date().getTime();
         String accessToken = SignGenerator.generate();
         return this.stub.createRoom(CreateRoomRequest.newBuilder()
-                .setPartnerID(configuration.getPartersId())
-                .setRequestTimestamp(timestamp)
                 .setRequestKey(requestId)
-                .setAccessToken(accessToken)
+                .setRoomDisplayName(roomName)
                 .build());
     }
 }

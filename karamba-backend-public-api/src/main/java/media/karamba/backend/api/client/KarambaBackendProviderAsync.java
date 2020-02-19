@@ -5,5 +5,5 @@ import media.karamba.backend.api.grpc.CreateRoomResponse;
 
 public interface KarambaBackendProviderAsync {
 
-    ListenableFuture<CreateRoomResponse> createRoom(String roomName, String requestId) throws Exception;
+    ListenableFuture<CreateRoomResponse> createRoom(String roomName, String roomDescription,  String requestId) throws Exception;
 }

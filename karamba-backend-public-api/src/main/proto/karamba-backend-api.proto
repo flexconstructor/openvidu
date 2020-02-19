@@ -9,31 +9,216 @@ service MediaControlService {
 
     // Checks partners credentials for creating media room.
     rpc CreateRoom (CreateRoomRequest) returns (CreateRoomResponse);
-}
 
-// It contains one of : created room data or error DTO.
-message CreateRoomResponse {
-    oneof result {
-        RoomDTO roomData = 1;
-        ErrorDTO error = 2;
-    }
+    // Join exited room.
+    rpc JoinRoom (JoinRoomRequest) returns (JoinRoomResponse);
+
+    // Evict participant from existed room.
+    rpc EvictParticipant (EvictParticipantRequest) returns (SimpleResult);
+
+    // Closes exited room.
+    rpc CloseRoom (CloseRoomRequest) returns (SimpleResult);
+
+    // Returns statistic by partners application.
+    rpc ApplicationStat (ApplicationStatRequest) returns (ApplicationStatResponse);
+
+    // Returns statistic by room.
+    rpc RoomStat (RoomStatRequest) returns (RoomStatResponse);
+
 }
 
 // Request object for creation of media room.
 message CreateRoomRequest {
 
-    // Karamba partner ID.
-    string partnerID = 1;
+    // Room display name for uses by clients media player.
+    string roomDisplayName = 1;
 
-    // Request creation date (UNIX timestamp)
-    int64 requestTimestamp = 2;
+    // Room description for uses by clients media player.
+    string roomDescription = 2;
 
-    // Request key (it line returns to client with response anyway).
-    string requestKey = 3;
+    // Partners request key for return with server response.
+    string requestKey = 4;
 
-    // base64 of ordered partnersID + partners secret + requestTimestamp + requestKey.
-    string accessToken = 4;
+    // Contains data for partners credential.
+    RequestSign sign = 5;
+}
 
+// It contains one of : created room data or error DTO.
+message CreateRoomResponse {
+
+    // Partners request key given with request.
+    string requestKey = 1;
+
+    // Result of partners request.
+    oneof result {
+
+        // Existed room data object.
+        RoomDTO roomData = 2;
+
+        // Room creation error if it throws.
+        ErrorDTO error = 3;
+    }
+}
+
+// Request for existed room joining.
+message JoinRoomRequest {
+
+    // Partners request key for return with server response.
+    string requestKey = 1;
+
+    // Room ID.
+    string roomId = 2;
+
+    // User ID that was assigned in the partner system.
+    string userID = 3;
+
+    // User Display name (Nickname for example).
+    string userDisplayName = 4;
+
+    // Message for other participants ("Hi, guys!" for example).
+    string message = 5;
+
+    // Contains data for partners credential.
+    RequestSign sign = 6;
+}
+
+// Returns result of room joining.
+message JoinRoomResponse {
+
+    // Partners request key.
+    string requestKey = 1;
+
+    // Request result.
+    oneof result {
+
+        // Participants data object.
+        ParticipantDTO participant = 2;
+
+        // Error data if it thrown.
+        ErrorDTO error = 3;
+    }
+}
+
+// Request for evict participant from existed room.
+message EvictParticipantRequest {
+
+    // Partners request key for return with server response.
+    string requestKey = 1;
+
+    // ID of existed room.
+    string roomID = 2;
+
+    // ID of participant session.
+    string participantSessionId = 3;
+
+    // Reason for participant eviction.
+    string reason = 4;
+
+    // Contains data for partners credential.
+    RequestSign sign = 5;
+}
+
+// Request for closing of existed room.
+message CloseRoomRequest {
+
+    // Partners request key for return with server response.
+    string requestKey = 1;
+
+    // Room ID.
+    string roomID = 2;
+
+    // Reason of closing room.
+    string reason = 3;
+
+    // Contains data for partners credential.
+    RequestSign sign = 4;
+}
+
+// Simple result that contains boolean as result of operation or error if operation failed.
+message SimpleResult {
+
+    // Partners request key.
+    string requestKey = 1;
+
+    // One of Operation result or error data.
+    oneof result {
+
+        // Is ok or no.
+        bool complete = 2;
+
+        // Error data.
+        ErrorDTO error = 3;
+    }
+}
+
+// Request for statistic by partners application.
+message ApplicationStatRequest {
+
+    // Partners request key for return with server response.
+    string requestKey = 1;
+
+    // Timestamp of statistics start. All rooms that created after the date should contains in result.
+    int64 from = 2;
+
+    // Timestamp of statistics end. All rooms that created before the date should contains in result.
+    int64 to = 3;
+
+    // Requested page.
+    int32 page = 4;
+
+    // Items per page.
+    int32 limit = 5;
+
+    // Room status. All rooms with requested status should contains in result.
+    RoomStatus status = 6;
+
+    // Contains data for partners credential.
+    RequestSign sign = 7;
+}
+
+// Returns room data requested with application stat request.
+message ApplicationStatResponse {
+    // Partners request key.
+    string requestKey = 1;
+
+    // One of map of requested rooms data or error.
+    oneof result {
+
+        // Map of requested rooms data.
+        RoomMap rooms = 2;
+
+        // Error data if it thrown.
+        ErrorDTO error = 3;
+    }
+}
+
+// Request of room statistic.
+message RoomStatRequest {
+
+    // Partners request key for return with server response.
+    string requestKey = 1;
+
+    // Room ID.
+    string roomID = 2;
+
+    // Contains data for partners credential.
+    RequestSign sign = 3;
+}
+
+// Room stats response.
+message RoomStatResponse {
+
+    // Partners request key.
+    string requestKey = 1;
+    // One of room participants data or error if it thrown.
+    oneof result {
+
+        // Map of room participants data.
+        ParticipantMap participants = 2;
+
+        // Error data if it thrown.
+        ErrorDTO error = 3;
+    }
 }
 
 // Media room data object.
@@ -42,12 +227,25 @@ message RoomDTO {
     // Room ID
     string roomID = 1;
 
-    // Owner`s participant ID.
-    string ownerID = 2;
+    // Room display name.
+    string roomDisplayName = 3;
 
-    // Partners request key.
-    string requestKey = 3;
+    // Room description.
+    string roomDescription = 4;
 
+    // Room creation data.
+    int64 creationDate = 5;
+
+    // Last date of room status changing.
+    int64 statusChangeDate = 6;
+
+    // Current status of the room.
+    RoomStatus status = 7;
+}
+
+// Map of rooms with room ID as key.
+message RoomMap {
+    map<string, RoomDTO> rooms = 1;
 }
 
 // Error data object that contains enumeration of error IDs and human readable description.
@@ -58,17 +256,138 @@ message ErrorDTO {
 
     // Human readable description.
     string description = 2;
-
-    // Partners request key.
-    string requestKye = 3;
 }
 
-// enumeration of error IDs.
+// Sing of partners request.
+message RequestSign {
+
+    // Karamba partner ID.
+    string partnerID = 1;
+
+    // Request creation date (UNIX timestamp)
+    int64 requestTimestamp = 2;
+
+    // base64 of ordered partnersID + partners secret + requestTimestamp.
+    string accessToken = 4;
+}
+
+// Room participant`s data.
+message ParticipantDTO {
+
+    // User ID that was assigned in the partner system.
+    string userId = 1;
+
+    // User Display name (Nickname for example).
+    string displayName = 2;
+
+    // Session ID.
+    string sessionId = 3;
+
+    // User role for the room.
+    UserRole role = 4;
+
+    // Current status of the participant.
+    ParticipantStatus status = 5;
+
+    // Date when the participant was entered into room.
+    int64 creationDate = 6;
+
+    // Last date when  participant status has been changed.
+    int64 statusChangeDate = 7;
+}
+
+// Map of participant`s data.
+message ParticipantMap {
+    map<string, ParticipantDTO> participants = 1;
+}
+
+// Enumeration of error IDs.
 enum ErrorID {
 
     // Internal server error.
     INTERNAL_ERROR = 0;
 
+    // Partner does not found by given partner`s id (or not exists).
+    PARTNER_DOES_NOT_FOUND = 1;
+
+    // Partners application does not found by given application ID (or not exists).
+    APPLICATION_DOES_NOT_FOUND = 2;
+
+    // Application found but not actual.
+    APPLICATION_EXPIRED = 3;
+
+    // Request created earlier than allowed by policy.
+    REQUEST_TIMEOUT_EXPIRED = 4;
+
+    // Partner is banned.
+    PARTNER_BLOCKED = 5;
+
+    // Access token is not valid.
+    ACCESS_TOKEN_INVALID = 6;
+
     // The partner has no eno funds.
-    NO_ENO_FUNDS = 1;
+    NO_ENO_FUNDS = 7;
+
+    // Requested room does not exists (or closed)
+    ROOM_DOES_NOT_EXISTS = 8;
+
+    // The visit of the participant not approved.
+    VISIT_DOES_NOT_APPROVED = 9;
+
+    // The participant already in the room.
+    VISIT_ALREADY_CREATED = 10;
+
+    // Requested period is out of bound (for application statistic).
+    PERIOD_OUT_OF_BOUND = 11;
+}
+
+// Participants role.
+enum UserRole {
+
+    // The participant is owner of the room can publish media, close the room and request evict of another participants.
+    OWNER = 0;
+
+    // The member of the room can publish of media data and can not close the room and request evict of another participants.
+    MEMBER = 1;
+
+    // The guest can not publish media.
+    GUEST = 2;
+}
+
+// Enumeration of statuses of room.
+enum RoomStatus {
+
+    // Room created but still empty.
+    WAIT_FOR_PARTICIPANTS = 0;
+
+    // The room owner enter into room.
+    OWNER_ON_BOARD = 1;
+
+    // Room has owner and some active participants.
+    WORKED = 2;
+
+    // Something went wrong.
+    ROOM_ERROR = 3;
+
+    // Room closed.
+    CLOSED = 4;
+}
+
+// Enumeration of statuses of participant.
+enum ParticipantStatus {
+
+    // The participant was created.
+    CREATED = 0;
+
+    // Participant in the room.
+    ACTIVE = 1;
+
+    // Something went wrong.
+    PARTICIPANT_ERROR = 2;
+
+    // The participant leave the room.
+    LEAVE = 3;
+
+    // Participant evicted from the room.
+    EVICTED = 4;
 }
